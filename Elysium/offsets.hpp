@@ -3,162 +3,154 @@
 uintptr_t base = (uintptr_t)GetModuleHandle(NULL);
 uintptr_t GameAssembly = (uintptr_t)GetModuleHandle("GameAssembly.dll");
 
+// PlayerIsInvincible
+uintptr_t playerinvincible = 0xFCC870;
 
-// Offsets Below
+// RoleAllowsSpawningInventions
+uintptr_t inventionspawn = 0x1A63710;
 
-uintptr_t PlayerIsInvincible = 0x1D9ADD0; // bool true
+//getdamageammount
+uintptr_t instakill = 0x15009D0; // int32 RecRoom.Core.Combat.Weapon.EnemyDamageSettings$$EILPKJPEAJO
 
-uintptr_t EnemyDamageSettings = 0x1B18680; // Int32 0
+//get_PlayerId
+uintptr_t playerid = 0x10C9CE0; //int32 Player$$get_PlayerId
 
-uintptr_t get_PlayerId = 0x2137270; //Int32 1
 
-// Search Term "get_IsLocked"
-uintptr_t QuestRoomExitDoor_get_IsLocked = 0x1178080; //bool false
-uintptr_t ArenaDoor_get_IsLocked = 0x130FAC0; // bool false
-uintptr_t RoomDoorV2_get_IsLocked = 0x278A7E0; // bool false
-uintptr_t RoomDoor_get_IsLocked = 0xF0CE60; // bool false
-uintptr_t InteractablePortal_get_IsLocked = 0x84ACE0; // bool false
-uintptr_t LockableDoor_get_IsLocked = 0x1174040; // bool false
+// New Offsets
 
-// Search Term "get_IsOnCooldown"
-uintptr_t RangedWeapon_get_IsOnCooldown = 0x1F6F220; // bool false
-uintptr_t SandboxGunHandle_get_IsOnCooldown = 0x20BDC00;// bool false
+uintptr_t doorv1 = 0x8FA410; // bool false RecRoom.Tools.RoomDoor$$get_IsLocked
+uintptr_t doorv2 = 0x16E7410; // bool false RecRoom.Tools.RoomDoorV2$$get_IsLocked
+uintptr_t arenadoor = 0x78C540; // bool false RecRoom.Activities.Arena.ArenaDoor$$get_IsLocked
+uintptr_t portal = 0x8FBAC0; // bool false RecRoom.Core.InteractablePortal$$get_IsLocked
+uintptr_t lockabledoor = 0x8FBAD0; // bool false LockableDoor$$get_IsLocked
+uintptr_t questexitdoor = 0x8C1DE0; //bool false QuestRoomExitDoor$$get_IsLocked
 
-uintptr_t AddFlyEnabled = 0x2668F70; // Special (true)
+uintptr_t get_IsFlyingEnabled = 0x20285E0; //bool true get_IsFlyingEnabled
 
-uintptr_t RemoveFlyEnabled = 0x2674740; // NOP
+uintptr_t buttonv1 = 0x2445500; //bool false 
 
-uintptr_t get_IsFlyingEnabled = 0x2678520; // bool true
+// Rec Cheat Offsets below
 
-//uintptr_t OreintationSkip = 0x1DAE820; // bool true RecRoom.Activities.Orientation.OrientationSubScene$$get_IsFinished
+uintptr_t Hysteria = 0x25D29B0; // bool true IsValid (SafeReportResult, Hysteria) get from DnSpy uhhhhhhhhhhhhhggggggg
+uintptr_t RapidFire = 0x25B93D0; // bool false RecRoom.Core.Combat.RangedWeapon$$get_IsOnCooldown
 
-// Search Term "get_LocalPlayerCanUse"
-uintptr_t CCT_get_LocalPlayerCanUse = 0x23C84F0; // bool true
+uintptr_t AddFly = 0x2A5F7F0; // special RecRoom.Core.Locomotion.PlayerMovement$$AddFlyEnabled
 
-uintptr_t get_LocalPlayerInBounds = 0x1D8AD60; // bool true
+uintptr_t RemoveFly = 0x2A6AB80; // NOP RecRoom.Core.Locomotion.PlayerMovement$$RemoveFlyEnabled
 
-uintptr_t get_WasMakerPenEverOut = 0x1A85450; // bool false
+uintptr_t IsFlyEnabled = 0x2A6E640; // bool true RecRoom.Core.Locomotion.PlayerMovement$$get_IsFlyingEnabled
 
-// Search Term "LogoutToBootScene"
-uintptr_t LogoutToBootScene = 0x18587A0; // NOP
-uintptr_t LogoutToBootSceneAsync = 0x18586A0; // NOP
+uintptr_t OreintationSkip = 0x1E0DAC0; // bool true RecRoom.Activities.Orientation.OrientationSubScene$$get_IsFinished
 
-// Search Term "CheckHashesInBackground"
-	//uintptr_t CheckHashesInBackground1 = 0x0; // NOP
-	//uintptr_t CheckHashesInBackground2 = 0x0; // NOP
-	//uintptr_t CheckHashesInBackground3 = 0x0; // bool false
-	//uintptr_t CheckHashesInBackground4 = 0x0; // NOP
+uintptr_t CanStartBroadcasting = 0x20BB250; // bool true
 
-uintptr_t get_MaxTeleportHorizontalDistance = 0x2678A90; // float big
+uintptr_t CanStopBroadcasting = 0x20BB3A0; // bool true
 
-uintptr_t get_MaxTeleportDropDistance = 0x26789E0; // float big
+uintptr_t HasBroadcastingAuthorization = 0x20BB7B0; // bool true
 
-uintptr_t get_IsSendChatOnCooldown = 0x2578670; // bool false
+uintptr_t get_CanRequestBroadcastingAuthorization = 0x20BAF80; // bool true
 
-uintptr_t get_LocalAccountIsModerator = 0x175FD70; // bool true
+uintptr_t get_CanViewBroadcasters = 0x20BB460; // bool true
 
-uintptr_t get_LocalAccountIsDeveloper = 0x175FBA0; // bool true
-uintptr_t get_IsDeveloper = 0x185CA10; // bool true
+uintptr_t get_CanManageBroadcasters = 0x20BAEA0; // bool true
 
-// Search Term "DoesLocalPlayerOwnKey"
-uintptr_t DoesLocalPlayerOwnKey1 = 0x23DB0C0; // bool true
-uintptr_t DoesLocalPlayerOwnKey2 = 0x23DAF40; // bool true 
-	//uintptr_t DoesLocalPlayerOwnKey3 = 0x1E313F0; // bool true
+uintptr_t get_CanRSVP = 0x20BAF50; // bool true
 
-// Search Term "get_IsGrabbable"
-uintptr_t CreationObject_get_IsGrabbable = 0x1A907B0; // bool true
-uintptr_t OMCreationObject_get_IsGrabbable = 0x261E8E0; // bool true
-uintptr_t Polaroid_get_IsGrabbable = 0x20706E0; // bool true
+uintptr_t get_CanJoinEvent = 0x20BAE10; // bool true
 
-uintptr_t get_CanUseMakerPen = 0xE96100; // bool true
+uintptr_t get_CanCreatePrivateEventInstance = 0x20BABB0; // bool true
 
-uintptr_t CanPlayerCreateWithMakerPen = 0x170E9C0; // bool true
+uintptr_t get_CanInviteFriends = 0x20BADB0; // bool true
 
-// Search Term "get_IsFrozen"
-uintptr_t Chip_get_IsFrozen = 0x7D63B0; // bool false
-uintptr_t CreationObject_get_IsFrozen = 0x1A90700; // bool false
-uintptr_t Tool_get_IsFrozen = 0x1DC3680; // bool false
+uintptr_t get_EventOrganizerIsLocalPlayer = 0x20BB510; // bool true
 
-	//uintptr_t LocalRemoveTrialItems = 0x0; // bool false
+//uintptr_t CanSpawnConsumable = 0x2049150; // bool true
+uintptr_t CanUseSharecam = 0x2B83B00; // bool true
 
-uintptr_t GoToDorm = 0x2007700; // NOP
+uintptr_t CanUseCCT = 0x1E98D80; // bool true RecRoom.ClothingCustomizerTool$$get_LocalPlayerCanUse
 
-uintptr_t LogWasMakerPenEverOut = 0x2AA31B0; // NOP
+uintptr_t InBounds = 0x1B6B5B0; // bool true GameBoundsManager$$get_LocalPlayerInBounds
 
-uintptr_t get_MagazineAmmunition = 0x239D700; // Int32 big
+uintptr_t RapidFire2 = 0x22F36D0; // bool false RecRoom.Core.Creation.SandboxGunHandle$$get_IsOnCooldown
 
-uintptr_t get_HasEnoughMagazineAmmunition = 0x239D520; // bool true
+uintptr_t WasMakerPenEverOut = 0x1FF2EF0; // bool false
 
-// Search Term "GetEnemyDamage"
-uintptr_t Weapon_GetEnemyDamage = 0x2398C30; // Int32 big
-uintptr_t WeaponMelee_GetEnemyDamageMelee = 0x26582B0; // Int32 big
+uintptr_t LtBS = 0x1ED2130; // NOP LogoutToBootScene
+uintptr_t LtBSAsync = 0x1ED2050; // NOP LogoutToBootSceneAsync
 
-uintptr_t GetPlayerAttackDamage = 0x21D40B0; // Int32 big
+uintptr_t CheckHashesInBackground = 0x2876A70; // NOP CheckHashesInBackground_b__0
 
-uintptr_t get_TotalAmmunition = 0x239D820; // Int32
+uintptr_t MaxTeleportHorizontalDistance = 0x2A6EB90; // float 9999999.9f
 
-uintptr_t get_CanAnyPlayerSit = 0x184A6C0; // bool true
+uintptr_t MaxTeleportDropDistance = 0x2A6EAE0; // float 9999999.9f
 
-// Search Term "get_RespawnDuration"
-uintptr_t Player_get_RespawnDuration = 0x1D9FE50; // float 0
-uintptr_t GameCombatManager_get_RespawnDuration = 0x21376E0; //float 0
+uintptr_t IsSendChatOnCooldown = 0x1EBC260; // bool false
 
-uintptr_t get_IsOverInkLimit = 0x1A84E90; // bool false
+uintptr_t LocalAccountIsModerator = 0x1DDBC50; // bool true
 
-// Search Term "CanAffordTool"
-uintptr_t CanAffordTool1 = 0x1A78EB0; // bool true
-uintptr_t CanAffordTool2 = 0x1A78EE0; // bool true
+uintptr_t LocalAccountIsDeveloper = 0x1DDBA30; // bool true
 
-// Search Term "RunJoinDormRoom"
-	//uintptr_t RunJoinDormRoom1 = 0x2C1C770; // bool false
-	//uintptr_t RunJoinDormRoom2 = 0x2C1C920; // NOP
-	//uintptr_t RunJoinDormRoom3 = 0x2C20910; // NOP
+uintptr_t DLPOKG = 0x216DA80; // bool true DoesLocalPlayerOwnKey
 
-uintptr_t CanAffordResourceCost = 0x1A78D80; // bool true
+uintptr_t DLPOKL = 0x216DAC0; // bool true DoesLocalPlayerOwnKey
 
-uintptr_t get_SelfScaleMaxSize = 0x1A76D10; // float 99999999.f
+uintptr_t creationobjectisgrabbable = 0x1F5BF40; // bool true RecRoom.Core.Creation.CreationObject$$get_IsGrabbable "TypeSignature": "iii"
 
-uintptr_t get_CanChangeMovementMode = 0x2011140; // bool false
+//uintptr_t get_LocalPlayerCanUseMakerPen = 0x27677872; // bool true
 
-// Search Term "TryApplicationQuit"
-uintptr_t TryApplicationQuit = 0x185B1A0; // NOP (int32_t OBHNBAGOABK, const MethodInfo* method)
-uintptr_t TryApplicationQuit1 = 0x185B370; // NOP (const MethodInfo* method)
+uintptr_t get_CanUseMakerPenRR = 0x7F4B50; // bool true
 
-uintptr_t FatalApplicationQuit = 0x1854590; // NOP
+//uintptr_t get_CanUseMakerPenGR = 0x14B5ED0; // bool true
 
-uintptr_t get_DesiredAvatarSkeletonTrackingSpaceScale = 0x2135C40; // Special (float)
+//uintptr_t get_LocalPlayerCanUseCreationMode = 0x1A65420; // bool true
+//uintptr_t CanPlayerCreate = 0x1A5D970; // bool true
+uintptr_t CanPlayerCreateWithMakerPen = 0x23151D0; // bool true
 
-// Search Term "RecRoom.Core.Combat.RangedWeapon.Fire" (vector3, float = 1f)
-uintptr_t RangedWeapon_Fire = 0x1F6C2F0; // Special (void)
+//uintptr_t PlayerCanUseMakerPenAccordingToRoles = 0x1A63340; // bool true
+uintptr_t creationobjectisfrozen = 0x1F59F80; // bool false RecRoom.Core.Creation.CreationObject$$get_IsFrozen
 
-uintptr_t SpawnConsumableForLocalPlayer = 0x24F62C0; // Special (void)
+uintptr_t IsDeveloper = 0x1EDAC80; // bool true
 
-// Search Term "CanUseMakerPenInternal"
-	//uintptr_t CanUseMakerPenInternal1 = 0x0; // bool true
-	//uintptr_t CanUsemakerPenInternal2 = 0x0; // bool true
+uintptr_t RemoveTrialItem = 0x1D623F0; // bool false get_IsHeldByPlayer
 
-uintptr_t CreatorRoleCanUseMakerPen = 0x3065FA0; // bool true
+uintptr_t BootLocalPlayerToDormRoom = 0x1EC94A0; // NOP
 
-#if 0 // Old Broadcasting & Event Perms Modules, client-sided so pointless
-uintptr_t CanStartBroadcasting = 0x18D1580; // bool true
+uintptr_t LogWasMakerPenEverOut = 0x2A13570; // NOP
 
-uintptr_t CanStopBroadcasting = 0x18D16D0; // bool true
+uintptr_t get_MagazineAmmunition = 0x25231D0; // Int32 - 2 DWORD
 
-uintptr_t HasBroadcastingAuthorization = 0x18D1AE0; // bool true
+uintptr_t get_HasEnoughMagAmmo = 0x2523010; // bool true RecRoom.Core.Combat.Weapon$$get_HasEnoughMagazineAmmunition
 
-uintptr_t get_CanRequestBroadcastingAuthorization = 0x18D12B0; // bool true
+uintptr_t GetEnemyDamage = 0x251EDA0; // int 2147483647 - 3 DWORD
 
-uintptr_t get_CanViewBroadcasters = 0x18D1790; // bool true
+uintptr_t GetPlayerAttackDamage = 0x28DDB00; // int 2147483647 - 2 DWORD
 
-uintptr_t get_CanManageBroadcasters = 0x18D11E0; // bool true
+uintptr_t get_TotalAmmunition = 0x25232F0; // Int32 - 2 DWORD
 
-uintptr_t get_CanRSVP = 0x18D1290; // bool true
+uintptr_t get_CanAnyPlayerSit = 0x1EC1FF0; // bool true - 2 DWORD
 
-uintptr_t get_CanJoinEvent = 0x18D1150; // bool true
+uintptr_t get_RespawnDuration = 0x23BB0E0; // float 0.0 - 2 DWORD
 
-uintptr_t get_CanCreatePrivateEventInstance = 0x18D0EF0; // bool true
+uintptr_t snowball = 0x25B68E0; // void RecRoom.Core.Combat.RangedWeapon$$Fire "TypeSignature": "viifi"
 
-uintptr_t get_CanInviteFriends = 0x18D10F0; // bool true
+uintptr_t foodsploit = 0x2653490; // void SpawnConsumableForLocalPlayer(string BPMABOMGJLN, long? NCOPCHMDABB, Vector3 DACBJNCMNFL, Quaternion MCFIHGJCDCP, float BDMGGOCELCK, PlayerSpawnedEquipment.JIPNAHJEKAE BHADODIAHJB)
 
-uintptr_t get_EventOrganizerIsLocalPlayer = 0x18D1840; // bool true
-#endif
+//uintptr_t DeleteAll = 0x1A64420; // bool true RecRoom.Systems.PlayerRoles.PlayerRoomRoleManager$$get_LocalPlayerCanDeleteAll
+uintptr_t get_IsOverInkLimit = 0x1FF2920; // bool false
+
+uintptr_t CanAffordTool = 0x1FE8D50; // bool true RecRoom.Core.Creation.CreationManager$$CanAffordTool "TypeSignature": "iiiii"
+uintptr_t CanAffordTool1 = 0x1FE8D20; // bool true RecRoom.Core.Creation.CreationManager$$CanAffordTool "TypeSignature": "iiii"
+
+uintptr_t RunJoinDormRoom = 0x1ED6FB0; // bool false SessionManager$$RunJoinDormRoom
+
+uintptr_t CanAffordResourceCost = 0x1FE8BF0; // bool true
+
+uintptr_t get_SelfScaleMaxSize = 0x1FE69E0; // float 99999999.f
+
+uintptr_t get_CanChangeMovementMode = 0x2FAD600; // bool false
+
+uintptr_t TryApplicationQuit = 0x1ED93B0; // NOP void SessionManager__TryApplicationQuit (int32_t OBHNBAGOABK, const MethodInfo* method)
+
+uintptr_t TryApplicationQuit1 = 0x1ED9270; // NOP "Signature": "void SessionManager__TryApplicationQuit (const MethodInfo* method)"
+uintptr_t FatalApplicationQuit = 0x1ECCFA0; // NOP
+uintptr_t PlayerSize = 0x23B9450; // special float get_desiredavatarskeletontrackingspacescale

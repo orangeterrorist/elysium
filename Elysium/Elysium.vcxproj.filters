@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Encryption.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -24,6 +27,9 @@
     <ClInclude Include="hooking.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="il2cpp.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -31,6 +37,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="offsets.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="together.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Discord\discord_register.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Discord\discord_rpc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
@@ -87,24 +102,6 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XorStr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="il2cpp.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="auth.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="anti.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Discord\discord_register.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Discord\discord_rpc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -152,12 +149,6 @@
     <ClCompile Include="kiero\kiero.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="auth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="anti.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="kiero\minhook\dll_resources\MinHook.def">
@@ -171,10 +162,5 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Discord\discord-rpc.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="hook.asm">
-      <Filter>Source Files</Filter>
-    </MASM>
   </ItemGroup>
 </Project>

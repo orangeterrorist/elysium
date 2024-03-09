@@ -1,28 +1,19 @@
 #pragma once
 
-//#include "il2cpp.hpp"
-//#include "together.hpp"
-#include "Globals.hpp"
-#include "XorStr.h"
+#include "il2cpp.hpp"
+#include "together.hpp"
 
-#include <iostream>
-#include "polyhook2/Detour/x64Detour.hpp"
+float teleport = 1.0f;
 
-#pragma comment (lib, "asmjit.lib")
-#pragma comment (lib, "asmtk.lib")
-#pragma comment (lib, "PolyHook_2.lib")
-#pragma comment (lib, "Zydis.lib")
-#pragma comment (lib, "Zycore.lib")
+int snowballcount = 10;
+int foodsploitcount = 10;
+float playerScale = 0.0f;
 
 // snowball exploit
 void(__fastcall* snowball_o)(DWORD*, DWORD*, float*, DWORD*);
 void __stdcall snowball_hook(DWORD* __this, DWORD* BNEEGIEDHBB, float* IMBPOKPKJBF, DWORD* method) {
-    int snowball;
-    snowball = Globals::Exploit::snowballcount;
-
-    for (int i = 0; i < snowball; ++i) {
+    for (int i = 0; i < snowballcount; ++i) {
         snowball_o(__this, BNEEGIEDHBB, IMBPOKPKJBF, method);
-        //std::cout << "snowball: " << snowball << std::endl << "global: " << Globals::Exploit::snowballcount << std::endl;
     }
     return snowball_o(__this, BNEEGIEDHBB, IMBPOKPKJBF, method);
 }
@@ -30,8 +21,7 @@ void __stdcall snowball_hook(DWORD* __this, DWORD* BNEEGIEDHBB, float* IMBPOKPKJ
 // foodsploit
 void(__fastcall* foodsploit_o)(DWORD*, DWORD*, DWORD*, DWORD*, DWORD*, float*, INT32*, DWORD*);
 void __stdcall foodsploit_hook(DWORD* __this, DWORD* BPMABOMGJLN, DWORD* NCOPCHMDABB, DWORD* DACBJNCMNFL, DWORD* MCFIHGJCDCP, float* BDMGGOCELCK, INT32* BHADODIAHJB, DWORD* method) {
-    int foodsploitcountt = Globals::Exploit::foodsploitcount;
-    for (int i = 0; i < foodsploitcountt; ++i) {
+    for (int i = 0; i < foodsploitcount; ++i) {
         foodsploit_o(__this, BPMABOMGJLN, NCOPCHMDABB, DACBJNCMNFL, MCFIHGJCDCP, BDMGGOCELCK, BHADODIAHJB, method);
     }
     return foodsploit_o(__this, BPMABOMGJLN, NCOPCHMDABB, DACBJNCMNFL, MCFIHGJCDCP, BDMGGOCELCK, BHADODIAHJB, method);
@@ -45,6 +35,12 @@ void __stdcall AddFly_hook(DWORD* __this, bool enable, DWORD* something, INT32 p
     return AddFly_o(__this, enable_new, something, priority, methodinfo);
 }
 
+// kiss
+void(__fastcall* kiss_o)(DWORD*, DWORD*);
+void __stdcall kiss_hook(DWORD* __this, DWORD* methodinfo) {
+    return kiss_o(__this, methodinfo);
+}
+
 // NOP
 
 void(__fastcall* unop_o)(DWORD*);
@@ -55,8 +51,8 @@ void __stdcall unop_hook(DWORD* uh) {
 
 // bools
 
-bool(__fastcall* utrue_o)(DWORD*, DWORD*);
-bool __stdcall utrue_hook(DWORD* uh, DWORD* uhh) {
+bool(__fastcall* utrue_o)(DWORD*);
+bool __stdcall utrue_hook(DWORD* uh) {
     return true;
 }
 
@@ -65,14 +61,14 @@ bool __stdcall ufalse_hook(DWORD* uh) {
     return false;
 }
 
+// Floats below
+
 //player scale
 
 float(__fastcall* playersize_o)(DWORD*);
 float __stdcall playersize_hook(DWORD* uh) {
-    return Globals::Player::PlayerSize;
+    return playerScale;
 }
-
-// Floats below
 
 float(__fastcall* ufloatbig_o)(DWORD*);
 float __stdcall ufloatbig_hook(DWORD* uh) {
@@ -81,7 +77,7 @@ float __stdcall ufloatbig_hook(DWORD* uh) {
 
 float(__fastcall* teleport_o)(DWORD*);
 float __stdcall teleport_hook(DWORD* uh) {
-    return 99999999.9f;
+    return teleport;
 }
 
 
@@ -107,33 +103,46 @@ int32_t __stdcall uint0_hook(DWORD* uh) {
     return int32_t(0);
 }
 
+
+
+
 void hook()
 {
     // don't make this anymore cancer than it needs to be, whole init func needs to be rewritten
+    const std::string VerNum{ "BETA v0.7" };
+
     MH_Initialize();
 
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + AddFlyEnabled), &AddFly_hook, (LPVOID*)&AddFly_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + RemoveFlyEnabled), &unop_hook, (LPVOID*)&unop_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_IsFlyingEnabled), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + AddFly), &AddFly_hook, (LPVOID*)&AddFly_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + RemoveFly), &unop_hook, (LPVOID*)&unop_o);
 
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + RangedWeapon_get_IsOnCooldown), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + SandboxGunHandle_get_IsOnCooldown), &ufalse_hook, (LPVOID*)&ufalse_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CheckHashesInBackground), &unop_hook, (LPVOID*)&unop_o);
+    MH_EnableHook(reinterpret_cast<LPVOID*>(GameAssembly + CheckHashesInBackground));
 
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CCT_get_LocalPlayerCanUse), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + get_LocalPlayerInBounds), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + get_WasMakerPenEverOut), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + get_IsSendChatOnCooldown), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + get_LocalAccountIsModerator), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + get_LocalAccountIsDeveloper), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + DoesLocalPlayerOwnKey1), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + DoesLocalPlayerOwnKey2), &utrue_hook, (LPVOID*)&utrue_o);
-    //MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + DoesLocalPlayerOwnKey3), &utrue_hook, (LPVOID*)&utrue_o);
-
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + get_IsDeveloper), &utrue_hook, (LPVOID*)&utrue_o);
-    //MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + LocalRemoveTrialItems), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + LogoutToBootScene), &unop_hook, (LPVOID*)&unop_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + LogoutToBootSceneAsync), &unop_hook, (LPVOID*)&unop_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + GoToDorm), &unop_hook, (LPVOID*)&unop_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + Hysteria), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + RapidFire), &ufalse_hook, (LPVOID*)&ufalse_o);
+    //MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + IsFlyEnabled), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + OreintationSkip), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanStartBroadcasting), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanStopBroadcasting), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + HasBroadcastingAuthorization), &utrue_hook, (LPVOID*)&utrue_o);
+    //MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanSpawnConsumable), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanUseSharecam), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanUseCCT), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + InBounds), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + RapidFire2), &ufalse_hook, (LPVOID*)&ufalse_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + WasMakerPenEverOut), &ufalse_hook, (LPVOID*)&ufalse_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + IsSendChatOnCooldown), &ufalse_hook, (LPVOID*)&ufalse_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + LocalAccountIsModerator), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + LocalAccountIsDeveloper), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + DLPOKG), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + DLPOKL), &utrue_hook, (LPVOID*)&utrue_o);
+    //MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + DeleteAll), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + IsDeveloper), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + RemoveTrialItem), &ufalse_hook, (LPVOID*)&ufalse_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + LtBS), &unop_hook, (LPVOID*)&unop_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + LtBSAsync), &unop_hook, (LPVOID*)&unop_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + BootLocalPlayerToDormRoom), &unop_hook, (LPVOID*)&unop_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + LogWasMakerPenEverOut), &unop_hook, (LPVOID*)&unop_o);
 
     //FatalApplicationQuit
@@ -142,47 +151,44 @@ void hook()
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + TryApplicationQuit), &unop_hook, (LPVOID*)&unop_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + TryApplicationQuit1), &unop_hook, (LPVOID*)&unop_o);
 
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + RunJoinDormRoom2), &ufalse_hook, (LPVOID*)&ufalse_o);
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + RunJoinDormRoom2), &unop_hook, (LPVOID*)&unop_o);
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + RunJoinDormRoom3), &unop_hook, (LPVOID*)&unop_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + RunJoinDormRoom), &unop_hook, (LPVOID*)&unop_o);
 
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_MagazineAmmunition), &uint1_hook, (LPVOID*)&uint1_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_HasEnoughMagazineAmmunition), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_HasEnoughMagAmmo), &utrue_hook, (LPVOID*)&utrue_o);
 
     // MakerPen below
+    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + PlayerCanUseMakerPenAccordingToRoles), &utrue_hook, (LPVOID*)&utrue_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CanPlayerCreateWithMakerPen), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanUseMakerPen), &utrue_hook, (LPVOID*)&utrue_o);
+    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CanPlayerCreate), &utrue_hook, (LPVOID*)&utrue_o);
+    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_LocalPlayerCanUseCreationMode), &utrue_hook, (LPVOID*)&utrue_o);
+    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanUseMakerPenGR), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanUseMakerPenRR), &utrue_hook, (LPVOID*)&utrue_o);
+    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_LocalPlayerCanUseMakerPen), &utrue_hook, (LPVOID*)&utrue_o);
     // MakerPen above
 
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + Weapon_GetEnemyDamage), &uintbig_hook, (LPVOID*)&uintbig_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + WeaponMelee_GetEnemyDamageMelee), &uintbig_hook, (LPVOID*)&uintbig_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + GetEnemyDamage), &uintbig_hook, (LPVOID*)&uintbig_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + GetPlayerAttackDamage), &uint0_hook, (LPVOID*)&uint0_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_TotalAmmunition), &uintbig_hook, (LPVOID*)&uintbig_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanAnyPlayerSit), &utrue_hook, (LPVOID*)&utrue_o);
 
     // I don't think that below hook actually does anything
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + Player_get_RespawnDuration), &ufloat0_hook, (LPVOID*)&ufloat0_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + GameCombatManager_get_RespawnDuration), &ufloat0_hook, (LPVOID*)&ufloat0_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_RespawnDuration), &ufloat0_hook, (LPVOID*)&ufloat0_o);
 
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanChangeMovementMode), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + RangedWeapon_Fire), &snowball_hook, (LPVOID*)&snowball_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + SpawnConsumableForLocalPlayer), &foodsploit_hook, (LPVOID*)&foodsploit_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + snowball), &snowball_hook, (LPVOID*)&snowball_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + foodsploit), &foodsploit_hook, (LPVOID*)&foodsploit_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_SelfScaleMaxSize), &ufloatbig_hook, (LPVOID*)&ufloatbig_o);
     MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanAffordResourceCost), &uint0_hook, (LPVOID*)&uint0_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanAffordTool), &uint0_hook, (LPVOID*)&uint0_o);
     MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanAffordTool1), &uint0_hook, (LPVOID*)&uint0_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanAffordTool2), &uint0_hook, (LPVOID*)&uint0_o);
     MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + get_IsOverInkLimit), &ufalse_hook, (LPVOID*)&ufalse_o);
 
-#if 0
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + OreintationSkip), &utrue_hook, (LPVOID*)&utrue_o);
+    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + PlayerSize), &playersize_hook, (LPVOID*)&playersize_o);
 
     // broadcasting
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanRequestBroadcastingAuthorization), &utrue_hook, (LPVOID*)&utrue_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanViewBroadcasters), &utrue_hook, (LPVOID*)&utrue_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanManageBroadcasters), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanStartBroadcasting), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CanStopBroadcasting), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + HasBroadcastingAuthorization), &utrue_hook, (LPVOID*)&utrue_o);
 
     // event perms
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanRSVP), &utrue_hook, (LPVOID*)&utrue_o);
@@ -190,50 +196,10 @@ void hook()
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanCreatePrivateEventInstance), &utrue_hook, (LPVOID*)&utrue_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_CanInviteFriends), &utrue_hook, (LPVOID*)&utrue_o);
     MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_EventOrganizerIsLocalPlayer), &utrue_hook, (LPVOID*)&utrue_o);
-#endif
 
     // teleport
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_MaxTeleportHorizontalDistance), &teleport_hook, (LPVOID*)&teleport_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_MaxTeleportDropDistance), &teleport_hook, (LPVOID*)&teleport_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + MaxTeleportHorizontalDistance), &teleport_hook, (LPVOID*)&teleport_o);
+    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + MaxTeleportDropDistance), &teleport_hook, (LPVOID*)&teleport_o);
 
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CanUseMakerPenInternal1), &utrue_hook, (LPVOID*)&utrue_o);
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CanUsemakerPenInternal2), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CreatorRoleCanUseMakerPen), &utrue_hook, (LPVOID*)&utrue_o);
-
-    // doors
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + QuestRoomExitDoor_get_IsLocked), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + ArenaDoor_get_IsLocked), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + RoomDoorV2_get_IsLocked), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + RoomDoor_get_IsLocked), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + InteractablePortal_get_IsLocked), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + LockableDoor_get_IsLocked), &ufalse_hook, (LPVOID*)&ufalse_o);
-
-    // hash checks
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CheckHashesInBackground1), &unop_hook, (LPVOID*)&unop_o);
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CheckHashesInBackground2), &unop_hook, (LPVOID*)&unop_o);
-    //MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CheckHashesInBackground3), &ufalse_hook, (LPVOID*)&ufalse_o);
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CheckHashesInBackground4), &unop_hook, (LPVOID*)&unop_o);
-
-    // coach
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_PlayerId), &uint1_hook, (LPVOID*)&uint1_o);
-
-    // grab 
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + CreationObject_get_IsGrabbable), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + OMCreationObject_get_IsGrabbable), &utrue_hook, (LPVOID*)&utrue_o);
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + Polaroid_get_IsGrabbable), &utrue_hook, (LPVOID*)&utrue_o);
-
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + Chip_get_IsFrozen), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + CreationObject_get_IsFrozen), &ufalse_hook, (LPVOID*)&ufalse_o);
-    MH_CreateHook(reinterpret_cast<LPBOOL*>(GameAssembly + Tool_get_IsFrozen), &ufalse_hook, (LPVOID*)&ufalse_o);
-    //MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + 0x2443C20), &utrue_hook, (LPVOID*)&utrue_o);
-    //MH_EnableHook(reinterpret_cast<LPVOID*>(GameAssembly + 0x2443C20));
-
-    MH_CreateHook(reinterpret_cast<LPVOID*>(GameAssembly + get_DesiredAvatarSkeletonTrackingSpaceScale), &playersize_hook, (LPVOID*)&playersize_o);
-
-    system(XorStr("cls"));
-    std::cout << XorStr("+===================================================================================+") << std::endl;
-    std::cout << XorStr("Elysium Client ") << Globals::Version << XorStr(" Initialized Successfully. \nHello Rec Room! >:^)") << std::endl;
-    std::cout << XorStr("+-----------------------------------------------------------------------------------+") << std::endl;
-    std::cout << XorStr("Welcome to Elysium Client!. \nType 'help' for a list of commands. Press 'home' key to open the click gui.") << std::endl;
-    std::cout << XorStr("+===================================================================================+") << std::endl;
+    std::cout << "Elysium Client " + VerNum + " Initialized Successfully! \nHello Rec Room! >:^)" << std::endl;
 }

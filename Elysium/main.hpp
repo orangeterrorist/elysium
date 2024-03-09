@@ -8,7 +8,6 @@ using namespace std;
 
 void init();
 void main();
-void preAuth();
 
 // KeyCode, only useful if you plan on using Unity's built in input handling.
 /*enum class KeyCode

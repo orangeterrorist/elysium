@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -54,7 +54,6 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -72,13 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Sophia\Desktop\Detours-4.0.1\lib.X64;C:\Program Files\Unity\Hub\Editor\2018.4.20f1\Editor\Data\il2cpp\libil2cpp;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\Unity\Hub\Editor\2018.4.20f1\Editor\Data\il2cpp\libil2cpp;$(IncludePath)</IncludePath>
     <TargetName>test</TargetName>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgUseMD>
-    </VcpkgUseMD>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,9 +136,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Program Files\Unity\Hub\Editor\2021.3.23f1\Editor\Data\il2cpp\libil2cpp;C:\Program Files\Unity\Hub\Editor\2021.3.18f1\Editor\Data\il2cpp\libil2cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Unity\Hub\Editor\2021.3.18f1\Editor\Data\il2cpp\libil2cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,11 +149,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="anti.h" />
-    <ClInclude Include="auth.h" />
     <ClInclude Include="Discord\discord_register.h" />
     <ClInclude Include="Discord\discord_rpc.h" />
     <ClInclude Include="Encryption.hpp" />
+    <ClInclude Include="framework.h" />
     <ClInclude Include="Globals.hpp" />
     <ClInclude Include="hooking.hpp" />
     <ClInclude Include="il2cpp.hpp" />
@@ -182,11 +177,9 @@
     <ClInclude Include="main.hpp" />
     <ClInclude Include="offsets.hpp" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="XorStr.h" />
+    <ClInclude Include="together.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="anti.cpp" />
-    <ClCompile Include="auth.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -209,10 +202,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="hook.asm">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </MASM>
     <None Include="kiero\minhook\dll_resources\MinHook.def" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +212,5 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>
